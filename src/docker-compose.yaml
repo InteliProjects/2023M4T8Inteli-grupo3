@@ -1,0 +1,63 @@
+version: '3'
+services:
+  postgres:
+    image: grupo3/postgres
+    build: ./postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: snX4@K#uzEnfALij3EZBpsChsZEdr%mf
+      POSTGRES_USER: grupo3
+      POSTGRES_DB: rnp_db
+    ports:
+      - "14161:5432"
+    volumes:
+      - /home/r3dlust/volumes/grupo3/src/postgres/data/:/var/lib/postgresql/data
+  broker:
+    image: arm64v8/eclipse-mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - /home/r3dlust/volumes/grupo3/src/broker/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /home/r3dlust/volumes/grupo3/src/broker/config/passwd:/mosquitto/config/passwd
+      - /home/r3dlust/volumes/grupo3/src/broker/data/:/mosquitto/data/
+      - /home/r3dlust/volumes/grupo3/src/broker/log/:/mosquitto/log/
+  api:
+    image: grupo3/api
+    restart: unless-stopped
+    build: ./api
+    ports:
+      - '21528:8005'
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_PASSWORD: snX4@K#uzEnfALij3EZBpsChsZEdr%mf
+      DB_USER: grupo3
+      DB_NAME: rnp_db
+      SECRET_JWT: 8D7FB683DB152AA22F43D341145BB
+  backend:
+    image: grupo3/backend
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      BROKER_IP: '144.22.180.239'
+      BROKER_PORT: 1883
+      BROKER_USERNAME: backend
+      BROKER_PASSWORD: "EsE#dq$$%FtbekUBZZQp%a8#^*dp4xZ3s"
+      DB_IP: '144.22.180.239'
+      DB_PORT: 14161
+      DB_NAME: rnp_db
+      DB_USER: grupo3
+      DB_PASSWORD: "snX4@K#uzEnfALij3EZBpsChsZEdr%mf"
+  frontend:
+    image: grupo3/frontend
+    build: ./frontend
+    restart: unless-stopped
+  nginx:
+    image: grupo3/nginx
+    build: ./nginx
+    restart: unless-stopped
+    ports:
+      - '80:80'    # HTTP
+      - '443:443'  # HTTPS

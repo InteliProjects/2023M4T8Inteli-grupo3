@@ -1,0 +1,10 @@
+fastapi==0.89.0
+uvicorn[standard]==0.20.0
+gunicorn==20.1.0
+databases==0.8.0
+yarl
+asyncpg==0.28.0
+python-dotenv==1.0.0
+qrcode==7.4.2
+passlib
+pyjwt

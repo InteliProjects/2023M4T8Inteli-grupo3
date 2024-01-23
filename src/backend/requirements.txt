@@ -1,0 +1,6 @@
+databases==0.8.0
+yarl
+asyncpg==0.28.0
+paho-mqtt==1.6.1
+python-dotenv==1.0.0
+nest-asyncio==1.5.8
